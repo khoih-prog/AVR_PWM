@@ -23,20 +23,20 @@
 
   ////////////////////////////////////////////
   // For Mega (2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 44, 45, 46)
-  Pin  2 => TIMER3B   // PE 4 ** 2  ** PWM2  
-  Pin  3 => TIMER3C   // PE 5 ** 3  ** PWM3  
-  Pin  4 => TIMER0B   // PG 5 ** 4  ** PWM4  
-  Pin  5 => TIMER3A   // PE 3 ** 5  ** PWM5  
-  Pin  6 => TIMER4A   // PH 3 ** 6  ** PWM6  
-  Pin  7 => TIMER4B   // PH 4 ** 7  ** PWM7  
-  Pin  8 => TIMER4C   // PH 5 ** 8  ** PWM8  
-  Pin  9 => TIMER2B   // PH 6 ** 9  ** PWM9  
-  Pin 10 => TIMER2A   // PB 4 ** 10 ** PWM10  
-  Pin 11 => TIMER1A   // PB 5 ** 11 ** PWM11  
-  Pin 12 => TIMER1B   // PB 6 ** 12 ** PWM12  
-  Pin 13 => TIMER0A   // PB 7 ** 13 ** PWM13  
-  Pin 44 => TIMER5C   // PL 5 ** 44 ** D44  
-  Pin 45 => TIMER5B   // PL 4 ** 45 ** D45  
+  Pin  2 => TIMER3B   // PE 4 ** 2  ** PWM2
+  Pin  3 => TIMER3C   // PE 5 ** 3  ** PWM3
+  Pin  4 => TIMER0B   // PG 5 ** 4  ** PWM4
+  Pin  5 => TIMER3A   // PE 3 ** 5  ** PWM5
+  Pin  6 => TIMER4A   // PH 3 ** 6  ** PWM6
+  Pin  7 => TIMER4B   // PH 4 ** 7  ** PWM7
+  Pin  8 => TIMER4C   // PH 5 ** 8  ** PWM8
+  Pin  9 => TIMER2B   // PH 6 ** 9  ** PWM9
+  Pin 10 => TIMER2A   // PB 4 ** 10 ** PWM10
+  Pin 11 => TIMER1A   // PB 5 ** 11 ** PWM11
+  Pin 12 => TIMER1B   // PB 6 ** 12 ** PWM12
+  Pin 13 => TIMER0A   // PB 7 ** 13 ** PWM13
+  Pin 44 => TIMER5C   // PL 5 ** 44 ** D44
+  Pin 45 => TIMER5B   // PL 4 ** 45 ** D45
   Pin 46 => TIMER5A   // PL 3 ** 46 ** D46
   ////////////////////////////////////////////
   // For 32u4 (3, 5, 6, 9, 10, 11, 13)
@@ -75,13 +75,13 @@
   //#define pinToUse      46            // Timer5A on Mega
   //#define pinToUse      45            // Timer5B on Mega
   //#define pinToUse      44            // Timer5C on Mega
-  
-#elif ( PWM_USING_ATMEGA_32U4  )  
+
+#elif ( PWM_USING_ATMEGA_32U4  )
   // Pins tested OK on 32u4
   //#define pinToUse      5            // Timer3A on 32u4
   #define pinToUse      9            // Timer1A on 32u4
   //#define pinToUse      10            // Timer1B on 32u4
-  
+
 #else
 
   // Pins tested OK on Nano / UNO
@@ -113,44 +113,44 @@ void printPWMInfo(AVR_PWM* PWM_Instance)
 
 void setup()
 {
-	Serial.begin(115200);
+  Serial.begin(115200);
 
-	while (!Serial);
+  while (!Serial);
 
-	delay(100);
+  delay(100);
 
-	Serial.print(F("\nStarting PWM_DynamicFreq on "));
-	Serial.println(BOARD_NAME);
-	Serial.println(AVR_PWM_VERSION);
+  Serial.print(F("\nStarting PWM_DynamicFreq on "));
+  Serial.println(BOARD_NAME);
+  Serial.println(AVR_PWM_VERSION);
 
-	frequency = 10000.0f;
-	PWM_Instance = new AVR_PWM(pinToUse, frequency, 50.0f);
+  frequency = 10000.0f;
+  PWM_Instance = new AVR_PWM(pinToUse, frequency, 50.0f);
 
-	if (PWM_Instance)
-	{
-		PWM_Instance->setPWM();
-	}
+  if (PWM_Instance)
+  {
+    PWM_Instance->setPWM();
+  }
 
-	Serial.println(dashLine);
+  Serial.println(dashLine);
 }
 
 void loop()
 {
-	delay(5000);
+  delay(5000);
 
-	frequency = 20000.0f;
+  frequency = 20000.0f;
 
-	Serial.print(F("Change PWM Freq to "));
-	Serial.println(frequency);
-	PWM_Instance->setPWM(pinToUse, frequency, 50.0f);
-	printPWMInfo(PWM_Instance);
+  Serial.print(F("Change PWM Freq to "));
+  Serial.println(frequency);
+  PWM_Instance->setPWM(pinToUse, frequency, 50.0f);
+  printPWMInfo(PWM_Instance);
 
-	delay(5000);
+  delay(5000);
 
-	frequency = 10000.0f;
+  frequency = 10000.0f;
 
-	Serial.print(F("Change PWM Freq to "));
-	Serial.println(frequency);
-	PWM_Instance->setPWM(pinToUse, frequency, 50.0f);
-	printPWMInfo(PWM_Instance);
+  Serial.print(F("Change PWM Freq to "));
+  Serial.println(frequency);
+  PWM_Instance->setPWM(pinToUse, frequency, 50.0f);
+  printPWMInfo(PWM_Instance);
 }

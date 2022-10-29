@@ -65,34 +65,34 @@
 #define LED_OFF       HIGH
 
 #if ( PWM_USING_ATMEGA2560 )
-// Pins tested OK in Mega
-//#define pinToUse      12            // Timer1B on Mega
-//#define pinToUse      11            // Timer1A on Mega
-//#define pinToUse       9            // Timer2B on Mega
-//#define pinToUse       2            // Timer3B on Mega
-//#define pinToUse       3            // Timer3C on Mega
-//#define pinToUse       5            // Timer3A on Mega
-//#define pinToUse       6            // Timer4A on Mega
-//#define pinToUse       7            // Timer4B on Mega
-#define pinToUse       8            // Timer4C on Mega
-//#define pinToUse      46            // Timer5A on Mega
-//#define pinToUse      45            // Timer5B on Mega
-//#define pinToUse      44            // Timer5C on Mega
+  // Pins tested OK in Mega
+  //#define pinToUse      12            // Timer1B on Mega
+  //#define pinToUse      11            // Timer1A on Mega
+  //#define pinToUse       9            // Timer2B on Mega
+  //#define pinToUse       2            // Timer3B on Mega
+  //#define pinToUse       3            // Timer3C on Mega
+  //#define pinToUse       5            // Timer3A on Mega
+  //#define pinToUse       6            // Timer4A on Mega
+  //#define pinToUse       7            // Timer4B on Mega
+  #define pinToUse       8            // Timer4C on Mega
+  //#define pinToUse      46            // Timer5A on Mega
+  //#define pinToUse      45            // Timer5B on Mega
+  //#define pinToUse      44            // Timer5C on Mega
 
 #elif ( PWM_USING_ATMEGA_32U4  )
-// Pins tested OK on 32u4
-////#define pinToUse      3            // Timer0B on 32u4
-//#define pinToUse      5            // Timer3A on 32u4
-#define pinToUse      9            // Timer1A on 32u4
-//#define pinToUse      10            // Timer1B on 32u4
+  // Pins tested OK on 32u4
+  ////#define pinToUse      3            // Timer0B on 32u4
+  //#define pinToUse      5            // Timer3A on 32u4
+  #define pinToUse      9            // Timer1A on 32u4
+  //#define pinToUse      10            // Timer1B on 32u4
 
 #else
 
-// Pins tested OK on Nano / UNO
-//#define pinToUse      9            // Timer1A on UNO, Nano, etc
-#define pinToUse     10            // Timer1B on UNO, Nano, etc
-//#define pinToUse      5               // Timer0B on UNO, Nano, e
-//#define pinToUse       3            // Timer2B on UNO, Nano, etc
+  // Pins tested OK on Nano / UNO
+  //#define pinToUse      9            // Timer1A on UNO, Nano, etc
+  #define pinToUse     10            // Timer1B on UNO, Nano, etc
+  //#define pinToUse      5               // Timer0B on UNO, Nano, e
+  //#define pinToUse       3            // Timer2B on UNO, Nano, etc
 #endif
 
 
