@@ -1,0 +1,47 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+AVR_PWM	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+###################################
+# Class AVR_PWM
+###################################
+
+setPWM_Int	KEYWORD2
+setPWM	KEYWORD2
+setPWM_Period	KEYWORD2
+setPWM_manual	KEYWORD2
+getActualDutyCycle	KEYWORD2
+getActualFreq	KEYWORD2
+getPWMPeriod	KEYWORD2
+get_freq_CPU	KEYWORD2
+getPin	KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+AVR_PWM_VERSION  LITERAL1
+AVR_PWM_VERSION_MAJOR  LITERAL1
+AVR_PWM_VERSION_MINOR  LITERAL1
+AVR_PWM_VERSION_PATCH  LITERAL1
+AVR_PWM_VERSION_INT  LITERAL1
+
+TIMER0_RESOLUTION	LITERAL1
+TIMER1_RESOLUTION	LITERAL1
+TIMER2_RESOLUTION	LITERAL1
+TIMER3_RESOLUTION	LITERAL1
+TIMER4_RESOLUTION	LITERAL1
+TIMER5_RESOLUTION	LITERAL1
+
+MAX_COUNT_8BIT	LITERAL1
+MAX_COUNT_10BIT	LITERAL1
+MAX_COUNT_16BIT	LITERAL1
+
+_PWM_LOGLEVEL_  LITERAL1
