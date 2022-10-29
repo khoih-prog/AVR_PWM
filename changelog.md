@@ -21,7 +21,7 @@
 
 ### Initial Releases v1.0.0
 
-1. Initial coding to support **AVR boards, such as Mega-2560, UNO, Nano, Leonardo, etc.**, etc. using AVR core
+1. Initial coding to support **AVR boards, such as Mega-2560, UNO, Nano, Leonardo, etc.**, using AVR cores
 2. The hardware-based PWM channels can generate very high frequencies.
 
 ---
