@@ -110,14 +110,16 @@ void setup()
 
 void loop()
 {
+  //delay(10000);
+  frequency = 200;    //20000;
+  dutyCycle = 20;     //90;
+
+  PWM_Instance->setPWM(pinToUse, frequency, dutyCycle);
+
   delay(10000);
-  frequency = 20000;
   dutyCycle = 90;
 
   PWM_Instance->setPWM(pinToUse, frequency, dutyCycle);
 
   delay(10000);
-  dutyCycle = 10;
-
-  PWM_Instance->setPWM(pinToUse, frequency, dutyCycle);
 }

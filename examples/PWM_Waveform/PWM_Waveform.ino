@@ -103,6 +103,7 @@ typedef struct
   uint16_t level;
 } PWD_Data;
 
+// Data for 1000Hz, PWMPeriod = 8000
 PWD_Data PWM_data[] =
 {
   {    0 },
@@ -175,7 +176,7 @@ void setup()
   Serial.println(BOARD_NAME);
   Serial.println(AVR_PWM_VERSION);
 
-  frequency = 1000.0f;
+  frequency = 10000.0f;
 
   // Create a dummy instance
   PWM_Instance = new AVR_PWM(pinToUse, frequency, 0);
@@ -193,7 +194,8 @@ void updateDC()
 {
   static uint16_t index = 0;
 
-  PWM_Instance->setPWM_manual(pinToUse, PWM_data[index].level);
+  // Mapping data to any other frequency from original data for 1000Hz, PWMPeriod = 8000
+  PWM_Instance->setPWM_manual(pinToUse, ( ( (uint32_t) PWM_data[index].level * PWM_Instance->getPWMPeriod() ) / 8000) );
 
   // Use at low freq to check
   //printPWMInfo(PWM_Instance);
@@ -203,7 +205,7 @@ void updateDC()
 
 void check_status()
 {
-#define UPDATE_INTERVAL     100L
+#define UPDATE_INTERVAL     50L
 
   static unsigned long update_timeout = UPDATE_INTERVAL;
 

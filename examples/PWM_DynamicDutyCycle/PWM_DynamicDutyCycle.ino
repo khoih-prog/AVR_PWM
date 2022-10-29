@@ -150,7 +150,7 @@ void setup()
 
 void loop()
 {
-  //frequency = 10000.0f;
+  //frequency = 200000.0f;
   frequency = 1000.0f;
 
   dutyCycle = 90.0f;
