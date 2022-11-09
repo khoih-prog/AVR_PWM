@@ -73,12 +73,14 @@ This hardware-based PWM library enables you to use Hardware-PWM on AVR-based boa
 This library is using the **same or similar functions** as other FastPWM libraries, as follows, to enable you to **port your PWM code easily between platforms**
 
 - [**RP2040_PWM**](https://github.com/khoih-prog/RP2040_PWM)
-- [**Teensy_PWM**](https://github.com/khoih-prog/Teensy_PWM)
+- [**AVR_PWM**](https://github.com/khoih-prog/AVR_PWM)
 - [**megaAVR_PWM**](https://github.com/khoih-prog/megaAVR_PWM)
 - [**ESP32_FastPWM**](https://github.com/khoih-prog/ESP32_FastPWM)
 - [**SAMD_PWM**](https://github.com/khoih-prog/SAMD_PWM)
 - [**SAMDUE_PWM**](https://github.com/khoih-prog/SAMDUE_PWM)
 - [**nRF52_PWM**](https://github.com/khoih-prog/nRF52_PWM)
+- [**Teensy_PWM**](https://github.com/khoih-prog/Teensy_PWM)
+- [**ATtiny_PWM**](https://github.com/khoih-prog/ATtiny_PWM)
 - [**Portenta_H7_PWM**](https://github.com/khoih-prog/Portenta_H7_PWM)
 - [**MBED_RP2040_PWM**](https://github.com/khoih-prog/MBED_RP2040_PWM)
 - [**nRF52_MBED_PWM**](https://github.com/khoih-prog/nRF52_MBED_PWM)
@@ -130,7 +132,7 @@ Functions using normal software-based PWMs, relying on loop() and calling millis
 ## Prerequisites
 
  1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
- 2. [`Arduino AVR core 1.8.5+`](https://github.com/arduino/ArduinoCore-avr) for Arduino AVR boards. Use Arduino Board Manager to install. [![Latest release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest/)
+ 2. [`Arduino AVR core 1.8.6+`](https://github.com/arduino/ArduinoCore-avr) for Arduino AVR boards. Use Arduino Board Manager to install. [![Latest release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest/)
  3. [`Adafruit AVR core 1.4.14+`](https://github.com/adafruit/Adafruit_Arduino_Boards) for Adafruit AVR boards. Use Arduino Board Manager to install. 
  4. [`Sparkfun AVR core 1.1.13+`](https://github.com/sparkfun/Arduino_Boards) for Sparkfun AVR boards. Use Arduino Board Manager to install. 
  
