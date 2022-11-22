@@ -6,8 +6,12 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/AVR_PWM.svg)](http://github.com/khoih-prog/AVR_PWM/issues)
 
+
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
+<a href="https://profile-counter.glitch.me/khoih-prog/count.svg" title="Total khoih-prog Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog/count.svg" style="height: 30px;width: 200px;"></a>
+<a href="https://profile-counter.glitch.me/khoih-prog-AVR_PWM/count.svg" title="AVR_PWM Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog-AVR_PWM/count.svg" style="height: 30px;width: 200px;"></a>
+
 
 ---
 ---
@@ -134,7 +138,7 @@ Functions using normal software-based PWMs, relying on loop() and calling millis
 
  1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
  2. [`Arduino AVR core 1.8.6+`](https://github.com/arduino/ArduinoCore-avr) for Arduino AVR boards. Use Arduino Board Manager to install. [![Latest release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest/)
- 3. [`Adafruit AVR core 1.4.14+`](https://github.com/adafruit/Adafruit_Arduino_Boards) for Adafruit AVR boards. Use Arduino Board Manager to install. 
+ 3. [`Adafruit AVR core 1.4.15+`](https://github.com/adafruit/Adafruit_Arduino_Boards) for Adafruit AVR boards. Use Arduino Board Manager to install. [![Latest release](https://img.shields.io/github/release/adafruit/Adafruit_Arduino_Boards.svg)](https://github.com/adafruit/Adafruit_Arduino_Boards/releases/latest/)
  4. [`Sparkfun AVR core 1.1.13+`](https://github.com/sparkfun/Arduino_Boards) for Sparkfun AVR boards. Use Arduino Board Manager to install. 
  
  
@@ -198,7 +202,7 @@ In the Arduino world, the **tone() function uses Timer2**.
 Before using any Timer, you have to make sure the **Timer has not been used by any other purpose.**
 
 
-```
+```cpp
 /******************************************************************************************************************************
   // For UNO / Nano
   Timer0 ( 8-bit) used by delay(), millis() and micros(), and PWM generation on pins 5 (6 not usable)
@@ -382,7 +386,7 @@ https://github.com/khoih-prog/AVR_PWM/blob/22230c236f4eaf3c4b4ee35f2008e78349acd
 The following is the sample terminal output when running example [PWM_DynamicDutyCycle](examples/PWM_DynamicDutyCycle) on **AVR Mega2560**, to demonstrate the ability to provide high PWM frequencies and ability to change DutyCycle `on-the-fly`.
 
 
-```
+```cpp
 Starting PWM_DynamicDutyCycle on Arduino AVR Mega2560/ADK
 AVR_PWM v1.0.0
 [PWM] AVR_PWM: _dutycycle = 32767
@@ -420,7 +424,7 @@ Actual data: pin = 8, PWM DC = 9.99, PWMPeriod = 8000.00, PWM Freq (Hz) = 1000.0
 
 The following is the sample terminal output when running example [**PWM_Multi**](examples/PWM_Multi) on **AVR Mega2560**, to demonstrate the ability to provide high PWM frequencies on multiple `PWM-capable` pins.
 
-```
+```cpp
 Starting PWM_Multi on Arduino AVR Mega2560/ADK
 AVR_PWM v1.0.0
 =====================================================================================
@@ -450,7 +454,7 @@ Actual data: pin = 12, PWM DC = 89.90, PWMPeriod = 1000.00, PWM Freq (Hz) = 8000
 
 The following is the sample terminal output when running example [**PWM_DynamicFreq**](examples/PWM_DynamicFreq) on **AVR Mega2560**, to demonstrate the ability to change dynamically PWM frequencies.
 
-```
+```cpp
 Starting PWM_DynamicFreq on Arduino AVR Mega2560/ADK
 AVR_PWM v1.0.0
 [PWM] AVR_PWM: _dutycycle = 32767
@@ -500,7 +504,7 @@ Actual data: pin = 8, PWM DC = 49.75, PWMPeriod = 400.00, PWM Freq (Hz) = 20000.
 The following is the sample terminal output when running example [**PWM_Waveform**](examples/PWM_Waveform) on **AVR Mega2560**, to demonstrate how to use the `setPWM_manual()` function in wafeform creation
 
 
-```
+```cpp
 Starting PWM_Waveform on Arduino AVR Mega2560/ADK
 AVR_PWM v1.0.0
 [PWM] AVR_PWM: _dutycycle = 0
@@ -555,7 +559,7 @@ Actual data: pin = 8, PWM DutyCycle = 0.00, PWMPeriod = 8000.00, PWM Freq (Hz) =
 The following is the sample terminal output when running example [**PWM_Waveform**](examples/PWM_Waveform) on **ATMega32U4**, to demonstrate how to use the `setPWM_manual()` function in wafeform creation
 
 
-```
+```cpp
 Starting PWM_Waveform on Arduino AVR ATMega32U4
 AVR_PWM v1.0.0
 [PWM] AVR_PWM: _dutycycle = 0
@@ -609,7 +613,7 @@ Actual data: pin = 9, PWM DutyCycle = 0.00, PWMPeriod = 8000.00, PWM Freq (Hz) =
 The following is the sample terminal output when running example [**PWM_Waveform**](examples/PWM_Waveform) on **AVR Nano**, to demonstrate how to use the `setPWM_manual()` function in wafeform creation
 
 
-```
+```cpp
 Starting PWM_Waveform on Arduino AVR UNO, Nano, etc.
 AVR_PWM v1.0.0
 [PWM] AVR_PWM: _dutycycle = 0
@@ -732,6 +736,6 @@ If you want to contribute to this project:
 
 ## Copyright
 
-Copyright 2022- Khoi Hoang
+Copyright (c) 2022- Khoi Hoang
 
 
