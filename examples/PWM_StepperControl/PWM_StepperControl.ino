@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  PWM_DynamicFreq.ino
+  PWM_StepperControl.ino
   For AVR-based boards  (UNO, Nano, Mega, 32U4, 16U4, etc. )
   Written by Khoi Hoang
 
@@ -57,100 +57,94 @@
   Pin 11 => TIMER2(A)
 ******************************************************************************************************************************/
 
+// Use with Stepper-Motor driver, such as TMC2209
+
 #define _PWM_LOGLEVEL_       4
 
 #include "AVR_PWM.h"
 
 #if ( PWM_USING_ATMEGA2560 )
 // Pins tested OK in Mega
-//#define pinToUse      12            // Timer1B on Mega
-//#define pinToUse      11            // Timer1A on Mega
-//#define pinToUse       9            // Timer2B on Mega
-//#define pinToUse       2            // Timer3B on Mega
-//#define pinToUse       3            // Timer3C on Mega
-//#define pinToUse       5            // Timer3A on Mega
-//#define pinToUse       6            // Timer4A on Mega
-//#define pinToUse       7            // Timer4B on Mega
-#define pinToUse       8            // Timer4C on Mega
-//#define pinToUse      46            // Timer5A on Mega
-//#define pinToUse      45            // Timer5B on Mega
-//#define pinToUse      44            // Timer5C on Mega
+//#define STEP_PIN      12            // Timer1B on Mega
+//#define STEP_PIN      11            // Timer1A on Mega
+//#define STEP_PIN       9            // Timer2B on Mega
+//#define STEP_PIN       2            // Timer3B on Mega
+//#define STEP_PIN       3            // Timer3C on Mega
+//#define STEP_PIN       5            // Timer3A on Mega
+//#define STEP_PIN       6            // Timer4A on Mega
+//#define STEP_PIN       7            // Timer4B on Mega
+#define STEP_PIN       8            // Timer4C on Mega
+//#define STEP_PIN      46            // Timer5A on Mega
+//#define STEP_PIN      45            // Timer5B on Mega
+//#define STEP_PIN      44            // Timer5C on Mega
 
 #elif ( PWM_USING_ATMEGA_32U4  )
 // Pins tested OK on 32u4
-//#define pinToUse      5            // Timer3A on 32u4
-#define pinToUse      9            // Timer1A on 32u4
-//#define pinToUse      10            // Timer1B on 32u4
+//#define STEP_PIN      5            // Timer3A on 32u4
+#define STEP_PIN      9            // Timer1A on 32u4
+//#define STEP_PIN      10            // Timer1B on 32u4
 
 #else
 
 // Pins tested OK on Nano / UNO
-//#define pinToUse      9            // Timer1A on UNO, Nano, etc
-#define pinToUse     10            // Timer1B on UNO, Nano, etc
-//#define pinToUse      5               // Timer0B on UNO, Nano, e
-//#define pinToUse       3            // Timer2B on UNO, Nano, etc
+//#define STEP_PIN      9            // Timer1A on UNO, Nano, etc
+#define STEP_PIN     10            // Timer1B on UNO, Nano, etc
+//#define STEP_PIN      5               // Timer0B on UNO, Nano, e
+//#define STEP_PIN       3            // Timer2B on UNO, Nano, etc
 #endif
 
-AVR_PWM* PWM_Instance;
+#define DIR_PIN       12
 
-float frequency;
+AVR_PWM* stepper;
 
-char dashLine[] = "=====================================================================================";
-
-void printPWMInfo(AVR_PWM* PWM_Instance)
+void setSpeed(int speed)
 {
-  Serial.println(dashLine);
-  Serial.print("Actual data: pin = ");
-  Serial.print(PWM_Instance->getPin());
-  Serial.print(", PWM DC = ");
-  Serial.print(PWM_Instance->getActualDutyCycle());
-  Serial.print(", PWMPeriod = ");
-  Serial.print(PWM_Instance->getPWMPeriod());
-  Serial.print(", PWM Freq (Hz) = ");
-  Serial.println(PWM_Instance->getActualFreq(), 4);
-  Serial.println(dashLine);
+  if (speed == 0)
+  {
+    // Use DC = 0 to stop stepper
+    stepper->setPWM(STEP_PIN, 500, 0);
+  }
+  else
+  {
+    //  Set the frequency of the PWM output and a duty cycle of 50%
+    digitalWrite(DIR_PIN, (speed < 0));
+    stepper->setPWM(STEP_PIN, abs(speed), 50);
+  }
 }
 
-void setup()
+void setup() 
 {
+  pinMode(DIR_PIN, OUTPUT);
+  
   Serial.begin(115200);
 
-  while (!Serial);
+  while (!Serial && millis() < 5000);
 
   delay(100);
 
-  Serial.print(F("\nStarting PWM_DynamicFreq on "));
+  Serial.print(F("\nStarting PWM_StepperControl on "));
   Serial.println(BOARD_NAME);
   Serial.println(AVR_PWM_VERSION);
-
-  frequency = 10000.0f;
-  PWM_Instance = new AVR_PWM(pinToUse, frequency, 50.0f);
-
-  if (PWM_Instance)
-  {
-    PWM_Instance->setPWM();
-  }
-
-  Serial.println(dashLine);
+  
+  // Create PWM object and passed just a random frequency of 500
+  // The duty cycle is how you turn the motor on and off
+  stepper = new AVR_PWM(STEP_PIN, 500, 0);
 }
 
-void loop()
+void loop() 
 {
-  delay(5000);
+  setSpeed(1000);
+  delay(3000);
 
-  frequency = 20000.0f;
+  // Stop before reversing
+  setSpeed(0);
+  delay(3000);
 
-  Serial.print(F("Change PWM Freq to "));
-  Serial.println(frequency);
-  PWM_Instance->setPWM(pinToUse, frequency, 50.0f);
-  printPWMInfo(PWM_Instance);
+  // Reversing
+  setSpeed(-500);
+  delay(3000);
 
-  delay(5000);
-
-  frequency = 10000.0f;
-
-  Serial.print(F("Change PWM Freq to "));
-  Serial.println(frequency);
-  PWM_Instance->setPWM(pinToUse, frequency, 50.0f);
-  printPWMInfo(PWM_Instance);
+  // Stop before reversing
+  setSpeed(0);
+  delay(3000);
 }

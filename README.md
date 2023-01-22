@@ -45,6 +45,7 @@
   * [ 5. PWM_Multi](examples/PWM_Multi)
   * [ 6. PWM_MultiChannel](examples/PWM_MultiChannel)
   * [ 7. PWM_Waveform](examples/PWM_Waveform)
+  * [ 8. PWM_StepperControl](examples/PWM_StepperControl)
 * [Example PWM_Multi](#example-PWM_Multi)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
   * [1. PWM_DynamicDutyCycle on Arduino AVR Mega2560](#1-PWM_DynamicDutyCycle-on-Arduino-AVR-Mega2560)
@@ -72,7 +73,7 @@
 
 This hardware-based PWM library enables you to use Hardware-PWM on AVR-based boards to create and output PWM. These purely hardware-based PWM channels can generate very high PWM frequencies, depending on CPU clock and acceptable accuracy, due to 8 or 16-bit PWM / Timer registers.
 
-This library is using the **same or similar functions** as other FastPWM libraries, as follows, to enable you to **port your PWM code easily between platforms**
+This library is using the **same or similar functions** as other `FastPWM` libraries, as follows, to enable you to **port your PWM code easily between platforms**
 
  1. [**RP2040_PWM**](https://github.com/khoih-prog/RP2040_PWM)
  2. [**AVR_PWM**](https://github.com/khoih-prog/AVR_PWM)
@@ -364,7 +365,7 @@ PWM_Instance->setPWM_manual(PWM_Pins, new_level);
  5. [PWM_Multi](examples/PWM_Multi)
  6. [PWM_MultiChannel](examples/PWM_MultiChannel)
  7. [PWM_Waveform](examples/PWM_Waveform)
-
+ 8. [PWM_StepperControl](examples/PWM_StepperControl) **New**
  
 ---
 ---
@@ -386,7 +387,7 @@ The following is the sample terminal output when running example [PWM_DynamicDut
 
 ```cpp
 Starting PWM_DynamicDutyCycle on Arduino AVR Mega2560/ADK
-AVR_PWM v1.0.0
+AVR_PWM v1.0.1
 [PWM] AVR_PWM: _dutycycle = 32767
 [PWM] setPWM_Int: _dutycycle = 32767
 [PWM] setPWM_Int:using TIMER4C
@@ -424,7 +425,7 @@ The following is the sample terminal output when running example [**PWM_Multi**]
 
 ```cpp
 Starting PWM_Multi on Arduino AVR Mega2560/ADK
-AVR_PWM v1.0.0
+AVR_PWM v1.0.1
 =====================================================================================
 Index	Pin	PWM_freq	DutyCycle	Actual Freq
 =====================================================================================
@@ -454,7 +455,7 @@ The following is the sample terminal output when running example [**PWM_DynamicF
 
 ```cpp
 Starting PWM_DynamicFreq on Arduino AVR Mega2560/ADK
-AVR_PWM v1.0.0
+AVR_PWM v1.0.1
 [PWM] AVR_PWM: _dutycycle = 32767
 [PWM] setPWM_Int: _dutycycle = 32767
 [PWM] setPWM_Int:using TIMER4C
@@ -504,7 +505,7 @@ The following is the sample terminal output when running example [**PWM_Waveform
 
 ```cpp
 Starting PWM_Waveform on Arduino AVR Mega2560/ADK
-AVR_PWM v1.0.0
+AVR_PWM v1.0.1
 [PWM] AVR_PWM: _dutycycle = 0
 [PWM] setPWM: _dutycycle = 0
 [PWM] setPWM_Int: _dutycycle = 0
@@ -559,7 +560,7 @@ The following is the sample terminal output when running example [**PWM_Waveform
 
 ```cpp
 Starting PWM_Waveform on Arduino AVR ATMega32U4
-AVR_PWM v1.0.0
+AVR_PWM v1.0.1
 [PWM] AVR_PWM: _dutycycle = 0
 [PWM] setPWM: _dutycycle = 0
 [PWM] setPWM_Int: _dutycycle = 0
@@ -613,7 +614,7 @@ The following is the sample terminal output when running example [**PWM_Waveform
 
 ```cpp
 Starting PWM_Waveform on Arduino AVR UNO, Nano, etc.
-AVR_PWM v1.0.0
+AVR_PWM v1.0.1
 [PWM] AVR_PWM: _dutycycle = 0
 [PWM] setPWM: _dutycycle = 0
 [PWM] setPWM_Int: _dutycycle = 0
@@ -703,7 +704,7 @@ Submit issues to: [AVR_PWM issues](https://github.com/khoih-prog/AVR_PWM/issues)
  - [`Arduino AVR core`](https://github.com/arduino/ArduinoCore-avr)
  - [`Adafruit AVR core`](https://github.com/adafruit/Adafruit_Arduino_Boards)
  - [`Sparkfun AVR core`](https://github.com/sparkfun/Arduino_Boards)
-
+ 2. Add example [PWM_StepperControl](https://github.com/khoih-prog/AVR_PWM/examples/PWM_StepperControl) to demo how to control Stepper Motor using PWM
 
 ---
 ---
@@ -711,6 +712,15 @@ Submit issues to: [AVR_PWM issues](https://github.com/khoih-prog/AVR_PWM/issues)
 ### Contributions and Thanks
 
 Many thanks for everyone for bug reporting, new feature suggesting, testing and contributing to the development of this library.
+
+1. Thanks to [Paul van Dinther](https://github.com/dinther) for proposing new way to use PWM to drive Stepper-Motor in [Using PWM to step a stepper driver #16](https://github.com/khoih-prog/RP2040_PWM/issues/16), leading to v1.0.1
+
+
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/dinther"><img src="https://github.com/dinther.png" width="100px;" alt="dinther"/><br /><sub><b>Paul van Dinther</b></sub></a><br /></td>
+  </tr>
+</table>
 
   
 ---

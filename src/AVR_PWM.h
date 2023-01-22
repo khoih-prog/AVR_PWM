@@ -8,11 +8,12 @@
 
   This is pure hardware-based PWM
 
-  Version: 1.0.0
+  Version: 1.0.1
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K.Hoang      27/10/2022 Initial coding for AVR-based boards  (UNO, Nano, Mega, 32U4, 16U4, etc. )
+  1.0.1   K Hoang      22/01/2023 Add `PWM_StepperControl` example
 *****************************************************************************************************************************/
 
 #pragma once
@@ -122,13 +123,13 @@
 ////////////////////////////////////////
 
 #ifndef AVR_PWM_VERSION
-  #define AVR_PWM_VERSION           F("AVR_PWM v1.0.0")
+  #define AVR_PWM_VERSION           F("AVR_PWM v1.0.1")
 
   #define AVR_PWM_VERSION_MAJOR     1
   #define AVR_PWM_VERSION_MINOR     0
-  #define AVR_PWM_VERSION_PATCH     0
+  #define AVR_PWM_VERSION_PATCH     1
 
-  #define AVR_PWM_VERSION_INT      1000000
+  #define AVR_PWM_VERSION_INT      1000001
 #endif
 
 ////////////////////////////////////////
