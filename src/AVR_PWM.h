@@ -8,12 +8,13 @@
 
   This is pure hardware-based PWM
 
-  Version: 1.0.1
+  Version: 1.1.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K.Hoang      27/10/2022 Initial coding for AVR-based boards  (UNO, Nano, Mega, 32U4, 16U4, etc. )
   1.0.1   K Hoang      22/01/2023 Add `PWM_StepperControl` example
+  1.1.0   K Hoang      24/01/2023 Add `PWM_manual` example and function. Catch low frequency error
 *****************************************************************************************************************************/
 
 #pragma once
@@ -123,13 +124,13 @@
 ////////////////////////////////////////
 
 #ifndef AVR_PWM_VERSION
-  #define AVR_PWM_VERSION           F("AVR_PWM v1.0.1")
+  #define AVR_PWM_VERSION           F("AVR_PWM v1.1.0")
 
   #define AVR_PWM_VERSION_MAJOR     1
-  #define AVR_PWM_VERSION_MINOR     0
-  #define AVR_PWM_VERSION_PATCH     1
+  #define AVR_PWM_VERSION_MINOR     1
+  #define AVR_PWM_VERSION_PATCH     0
 
-  #define AVR_PWM_VERSION_INT      1000001
+  #define AVR_PWM_VERSION_INT      1001000
 #endif
 
 ////////////////////////////////////////
@@ -243,12 +244,14 @@ class AVR_PWM
   public:
 
     AVR_PWM(const uint8_t& pin, const float& frequency, const float& dutycycle)
-    {
+    {        
       _pin        = pin;
-      _frequency  = frequency;
-      _dutycycle  = map(dutycycle, 0, 100.0f, 0, MAX_COUNT_16BIT);
 
       _timer      = digitalPinToTimer(pin);
+      
+      checkFrequency(pin, frequency);
+      
+      _dutycycle  = map(dutycycle, 0, 100.0f, 0, MAX_COUNT_16BIT);
 
       PWM_LOGDEBUG1("AVR_PWM: _dutycycle =", _dutycycle);
 
@@ -263,6 +266,42 @@ class AVR_PWM
     ///////////////////////////////////////////
 
   private:
+  
+    float checkFrequency(const uint8_t& pin, const float& frequency)
+    {
+      float minFrequency;
+      
+      _frequency  = frequency;
+      _timer      = digitalPinToTimer(pin);
+      
+      if ( (_timer == TIMER0A) || (_timer == TIMER0B) || \
+           (_timer == TIMER2) || (_timer == TIMER2A) || (_timer == TIMER2B) )
+      { 
+        minFrequency = (float) F_CPU / TIMER0_RESOLUTION;
+        
+        // 8-bit timer
+        if (frequency < minFrequency)
+        {
+          PWM_LOGERROR3("AVR_PWM:Too low frequency =", frequency, ", min = ", minFrequency);
+          _frequency  = minFrequency;
+        }
+      }
+      else
+      {
+        // 8-bit timer for Timer 1
+        minFrequency = (float) F_CPU / TIMER1_RESOLUTION;
+        
+        if (frequency < minFrequency)
+        {
+          PWM_LOGERROR3("AVR_PWM:Too low frequency =", frequency, ", min = ", minFrequency);
+          _frequency  = minFrequency;
+        }  
+      }
+      
+      return _frequency;
+    }
+
+    ///////////////////////////////////////////
 
     void setPeriod_Timer0(unsigned long microseconds) __attribute__((always_inline))
     {
@@ -307,7 +346,7 @@ class AVR_PWM
       }
       else
       {
-        PWM_LOGERROR1("setPeriod_Timer0: Error, min freq (Hz) =", (float) F_CPU / (1024 *  TIMER0_RESOLUTION) );
+        PWM_LOGERROR1("setPeriod_Timer0: Error, min freq (Hz) =", (float) F_CPU / TIMER0_RESOLUTION );
 
         clockSelectBits = _BV(CS02) | _BV(CS01) | _BV(CS00);
         pwmPeriod = TIMER0_RESOLUTION - 1;
@@ -357,7 +396,7 @@ class AVR_PWM
       }
       else
       {
-        PWM_LOGERROR1("setPeriod_Timer1: Error, min freq (Hz) =", (float) F_CPU / (1024 *  TIMER1_RESOLUTION) );
+        PWM_LOGERROR1("setPeriod_Timer1: Error, min freq (Hz) =", (float) F_CPU / TIMER1_RESOLUTION );
 
         clockSelectBits = _BV(CS12) | _BV(CS10);
         pwmPeriod = TIMER1_RESOLUTION - 1;
@@ -419,7 +458,7 @@ class AVR_PWM
       }
       else
       {
-        PWM_LOGERROR1("setPeriod_Timer2: Error, min freq (Hz) =", (float) F_CPU / (1024 *  TIMER2_RESOLUTION) );
+        PWM_LOGERROR1("setPeriod_Timer2: Error, min freq (Hz) =", (float) F_CPU / TIMER2_RESOLUTION );
 
         clockSelectBits = _BV(CS22) | _BV(CS21) | _BV(CS20);
         pwmPeriod = TIMER2_RESOLUTION - 1;
@@ -471,7 +510,7 @@ class AVR_PWM
       }
       else
       {
-        PWM_LOGERROR1("setPeriod_Timer3: Error, min freq (Hz) =", (float) F_CPU / (1024 *  TIMER3_RESOLUTION) );
+        PWM_LOGERROR1("setPeriod_Timer3: Error, min freq (Hz) =", (float) F_CPU / TIMER3_RESOLUTION );
 
         clockSelectBits = _BV(CS32) | _BV(CS30);
         pwmPeriod = TIMER3_RESOLUTION - 1;
@@ -524,7 +563,7 @@ class AVR_PWM
       }
       else
       {
-        PWM_LOGERROR1("setPeriod_Timer4: Error, min freq (Hz) =", (float) F_CPU / (1024 *  TIMER4_RESOLUTION) );
+        PWM_LOGERROR1("setPeriod_Timer4: Error, min freq (Hz) =", (float) F_CPU / TIMER4_RESOLUTION );
 
         clockSelectBits = _BV(CS42) | _BV(CS40);
         pwmPeriod = TIMER4_RESOLUTION - 1;
@@ -574,7 +613,7 @@ class AVR_PWM
       }
       else
       {
-        PWM_LOGERROR1("setPeriod_Timer5: Error, min freq (Hz) =", (float) F_CPU / (1024 *  TIMER5_RESOLUTION) );
+        PWM_LOGERROR1("setPeriod_Timer5: Error, min freq (Hz) =", (float) F_CPU / TIMER5_RESOLUTION );
 
         clockSelectBits = _BV(CS52) | _BV(CS50);
         pwmPeriod = TIMER5_RESOLUTION - 1;
@@ -601,6 +640,8 @@ class AVR_PWM
       uint16_t MAX_COUNT = MAX_COUNT_16BIT;
 
       pinMode(pin, OUTPUT);
+      
+      float new_frequency = checkFrequency(pin, frequency);
 
       if ( (_timer == TIMER0A) || (_timer == TIMER0B) || \
            (_timer == TIMER2) || (_timer == TIMER2A) || (_timer == TIMER2B) )
@@ -643,7 +684,7 @@ class AVR_PWM
           TCCR0B = _BV(WGM02);              // set mode as phase correct pwm, stop the timer
           TCCR0A = 0;                       // clear control register A
 
-          setPeriod_Timer0(1000000UL / frequency);
+          setPeriod_Timer0(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 8;
 
@@ -674,7 +715,7 @@ class AVR_PWM
           TCCR0B = _BV(WGM02);              // set mode as phase correct pwm, stop the timer
           TCCR0A = 0;                       // clear control register A
 
-          setPeriod_Timer0(1000000UL / frequency);
+          setPeriod_Timer0(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 8;
 
@@ -703,7 +744,7 @@ class AVR_PWM
           TCCR0B = _BV(WGM02);              // set mode as phase correct pwm, stop the timer
           TCCR0A = 0;                       // clear control register A
 
-          setPeriod_Timer0(1000000UL / frequency);
+          setPeriod_Timer0(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 8;
 
@@ -732,7 +773,7 @@ class AVR_PWM
           TCCR1B = _BV(WGM13);        // set mode as phase and frequency correct pwm, stop the timer
           TCCR1A = 0;                 // clear control register A
 
-          setPeriod_Timer1(1000000UL / frequency);
+          setPeriod_Timer1(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 16;
 
@@ -755,7 +796,7 @@ class AVR_PWM
           TCCR1B = _BV(WGM13);        // set mode as phase and frequency correct pwm, stop the timer
           TCCR1A = 0;                 // clear control register A
 
-          setPeriod_Timer1(1000000UL / frequency);
+          setPeriod_Timer1(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 16;
 
@@ -778,7 +819,7 @@ class AVR_PWM
           TCCR1B = _BV(WGM13);        // set mode as phase and frequency correct pwm, stop the timer
           TCCR1A = 0;                 // clear control register A
 
-          setPeriod_Timer1(1000000UL / frequency);
+          setPeriod_Timer1(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 16;
 
@@ -802,7 +843,7 @@ class AVR_PWM
           TCCR2B = _BV(WGM20);  // set mode as phase correct pwm, stop the timer
           TCCR2A = 0;                       // clear control register A
 
-          setPeriod_Timer2(1000000UL / frequency);
+          setPeriod_Timer2(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 8;
 
@@ -829,7 +870,7 @@ class AVR_PWM
           TCCR2B = _BV(WGM22);  // set mode as phase correct pwm, stop the timer
           TCCR2A = 0;                       // clear control register A
 
-          setPeriod_Timer2(1000000UL / frequency);
+          setPeriod_Timer2(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 8;
 
@@ -857,7 +898,7 @@ class AVR_PWM
           TCCR2B = _BV(WGM22);              // set mode as phase correct pwm, stop the timer
           TCCR2A = 0;                       // clear control register A
 
-          setPeriod_Timer2(1000000UL / frequency);
+          setPeriod_Timer2(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 8;
 
@@ -885,7 +926,7 @@ class AVR_PWM
           TCCR3B = _BV(WGM33);        // set mode as phase and frequency correct pwm, stop the timer
           TCCR3A = 0;                 // clear control register A
 
-          setPeriod_Timer3(1000000UL / frequency);
+          setPeriod_Timer3(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 16;
 
@@ -908,7 +949,7 @@ class AVR_PWM
           TCCR3B = _BV(WGM33);        // set mode as phase and frequency correct pwm, stop the timer
           TCCR3A = 0;                 // clear control register A
 
-          setPeriod_Timer3(1000000UL / frequency);
+          setPeriod_Timer3(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 16;
 
@@ -932,7 +973,7 @@ class AVR_PWM
           TCCR3B = _BV(WGM33);        // set mode as phase and frequency correct pwm, stop the timer
           TCCR3A = 0;                 // clear control register A
 
-          setPeriod_Timer3(1000000UL / frequency);
+          setPeriod_Timer3(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 16;
 
@@ -960,7 +1001,7 @@ class AVR_PWM
           TCCR4B = _BV(WGM43);        // set mode as phase and frequency correct pwm, stop the timer
           TCCR4A = 0;                 // clear control register A
 
-          setPeriod_Timer4(1000000UL / frequency);
+          setPeriod_Timer4(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 16;
 
@@ -988,7 +1029,7 @@ class AVR_PWM
           TCCR4B = _BV(WGM43);        // set mode as phase and frequency correct pwm, stop the timer
           TCCR4A = 0;                 // clear control register A
 
-          setPeriod_Timer4(1000000UL / frequency);
+          setPeriod_Timer4(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 16;
 
@@ -1012,7 +1053,7 @@ class AVR_PWM
           TCCR4B = _BV(WGM43);        // set mode as phase and frequency correct pwm, stop the timer
           TCCR4A = 0;                 // clear control register A
 
-          setPeriod_Timer4(1000000UL / frequency);
+          setPeriod_Timer4(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 16;
 
@@ -1035,7 +1076,7 @@ class AVR_PWM
           TCCR4B = _BV(WGM43);        // set mode as phase and frequency correct pwm, stop the timer
           TCCR4A = 0;                 // clear control register A
 
-          setPeriod_Timer4(1000000UL / frequency);
+          setPeriod_Timer4(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 16;
 
@@ -1060,7 +1101,7 @@ class AVR_PWM
           TCCR5B = _BV(WGM53);        // set mode as phase and frequency correct pwm, stop the timer
           TCCR5A = 0;                 // clear control register A
 
-          setPeriod_Timer5(1000000UL / frequency);
+          setPeriod_Timer5(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 16;
 
@@ -1084,7 +1125,7 @@ class AVR_PWM
           TCCR5B = _BV(WGM53);        // set mode as phase and frequency correct pwm, stop the timer
           TCCR5A = 0;                 // clear control register A
 
-          setPeriod_Timer5(1000000UL / frequency);
+          setPeriod_Timer5(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 16;
 
@@ -1108,7 +1149,7 @@ class AVR_PWM
           TCCR5B = _BV(WGM53);        // set mode as phase and frequency correct pwm, stop the timer
           TCCR5A = 0;                 // clear control register A
 
-          setPeriod_Timer5(1000000UL / frequency);
+          setPeriod_Timer5(1000000UL / new_frequency);
 
           _dutycycle = ((uint32_t) pwmPeriod * dutycycle) >> 16;
 
@@ -1183,7 +1224,7 @@ class AVR_PWM
       // Not the same pin or overvalue
       if ( (_pin != pin) || (DCValue > pwmPeriod) )
         return false;
-
+               
       switch (_timer)
       {
           //////////////////////////////////////
@@ -1408,12 +1449,21 @@ class AVR_PWM
           return false;
       }
 
-
-
-      PWM_LOGINFO7("PWM enabled, DCValue =", DCValue, ", pwmPeriod =", pwmPeriod,
+      _dutycycle = DCValue;
+      
+       PWM_LOGINFO7("PWM enabled, DCValue =", DCValue, ", pwmPeriod =", pwmPeriod,
                    ", _frequency =", _frequency, ", _actualFrequency =", _actualFrequency);
 
       return true;
+    }
+
+    ///////////////////////////////////////////
+    
+    // DCPercentage from 0.0f - 100.0f
+    bool setPWM_DCPercentage_manual(const uint8_t& pin, const float& DCPercentage)
+    {
+      // Convert to DCValue based on pwmPeriod
+      return setPWM_manual(pin, (DCPercentage * pwmPeriod) /100.0f);
     }
 
     ///////////////////////////////////////////
@@ -1427,7 +1477,7 @@ class AVR_PWM
 
     inline float getActualFreq()
     {
-      return _actualFrequency;
+      return _frequency;
     }
 
     ///////////////////////////////////////////
@@ -1457,7 +1507,7 @@ class AVR_PWM
 
     uint32_t    freq_CPU;
 
-    float       _actualFrequency;
+    float       _actualFrequency = 0;
     float       _frequency;
 
     // dutycycle from 0-65535 for 0%-100% to make use of 16-bit top register

@@ -1,6 +1,6 @@
 {
   "name": "AVR_PWM",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "keywords": "timing, device, control, timer, pwm, fast-pwm, hardware-based-pwm, high-frequency-pwm, hardware-pwm,  mission-critical, accuracy, precise, non-blocking, avr, mega-2560, nano, uno, leonardo, 32u4, 16u4, at-mega",
   "description": "This library enables you to use Hardware-based PWM channels on AVR-based boards, such as Nano, UNO, Mega, Leonardo, 32u4, etc., to create and output PWM. The most important feature is they're purely hardware-based PWM channels, supporting very high PWM frequencies. Therefore, their executions are not blocked by bad-behaving functions or tasks. This important feature is absolutely necessary for mission-critical tasks. These hardware-based PWMs, still work even if other software functions are blocking. Moreover, they are much more precise (certainly depending on clock frequency accuracy) than other software-based PWM using ISR, millis() or micros(). That's necessary if you need to control devices requiring high precision. New efficient setPWM_manual function to facilitate waveform creation using PWM",
   "authors":
