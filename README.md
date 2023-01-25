@@ -357,11 +357,11 @@ new_level = 50.0f * PWM_Instance->getPWMPeriod() / 100.0f ;
 PWM_Instance->setPWM_manual(PWM_Pins, new_level);
 ```
 
-or better
+or better and much easier to use
 
 ```cpp
-new_level = 50.0f;
-PWM_Instance->setPWM_DCPercentage_manual(PWM_Pins, new_level);
+new_DCPercentage = 50.0f;
+PWM_Instance->setPWM_DCPercentage_manual(PWM_Pins, new_DCPercentage);
 ```
 
 ---
@@ -761,7 +761,7 @@ Submit issues to: [AVR_PWM issues](https://github.com/khoih-prog/AVR_PWM/issues)
  2. Add example [PWM_StepperControl](https://github.com/khoih-prog/AVR_PWM/examples/PWM_StepperControl) to demo how to control Stepper Motor using PWM
  3. Add example [PWM_manual](https://github.com/khoih-prog/AVR_PWM/examples/PWM_manual) to demo how to correctly use PWM to generate waveform
  4. Add function `setPWM_DCPercentage_manual()` to facilitate the setting PWM DC manually by using DCPercentage, instead of absolute DCValue depending on varying PWMPeriod
- 5. Catch low frequency error and use lowest permissile frequency
+ 5. Catch low frequency error and use lowest permissible frequency
 
 ---
 ---
