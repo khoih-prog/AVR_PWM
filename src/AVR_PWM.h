@@ -8,13 +8,14 @@
 
   This is pure hardware-based PWM
 
-  Version: 1.1.0
+  Version: 1.2.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K.Hoang      27/10/2022 Initial coding for AVR-based boards  (UNO, Nano, Mega, 32U4, 16U4, etc. )
   1.0.1   K Hoang      22/01/2023 Add `PWM_StepperControl` example
   1.1.0   K Hoang      24/01/2023 Add `PWM_manual` example and function. Catch low frequency error
+  1.2.0   K Hoang      27/01/2023 Add `PWM_SpeedTest` example and faster `setPWM_DCPercentageInt_manual` function
 *****************************************************************************************************************************/
 
 #pragma once
@@ -124,13 +125,13 @@
 ////////////////////////////////////////
 
 #ifndef AVR_PWM_VERSION
-  #define AVR_PWM_VERSION           F("AVR_PWM v1.1.0")
+  #define AVR_PWM_VERSION           F("AVR_PWM v1.2.0")
 
   #define AVR_PWM_VERSION_MAJOR     1
-  #define AVR_PWM_VERSION_MINOR     1
+  #define AVR_PWM_VERSION_MINOR     2
   #define AVR_PWM_VERSION_PATCH     0
 
-  #define AVR_PWM_VERSION_INT      1001000
+  #define AVR_PWM_VERSION_INT      1002000
 #endif
 
 ////////////////////////////////////////
@@ -1456,6 +1457,17 @@ class AVR_PWM
 
       return true;
     }
+    
+    ///////////////////////////////////////////
+    
+    // Faster than setPWM_DCPercentage_manual by not using float
+    // DCPercentage from 0-65535 for 0.0f - 100.0f
+    bool setPWM_DCPercentageInt_manual(const uint8_t& pin, const uint16_t& DCPercentage)
+    {
+      //PWM_LOGERROR3("DCPercentage =", DCPercentage, ", DC =", ( DCPercentage >> 8 ) * ( pwmPeriod >> 8) );
+      // Convert to DCValue based on pwmPeriod
+      return setPWM_manual(pin, ( DCPercentage >> 8 ) * ( pwmPeriod >> 8) );
+    }
 
     ///////////////////////////////////////////
     
@@ -1463,7 +1475,7 @@ class AVR_PWM
     bool setPWM_DCPercentage_manual(const uint8_t& pin, const float& DCPercentage)
     {
       // Convert to DCValue based on pwmPeriod
-      return setPWM_manual(pin, (DCPercentage * pwmPeriod) /100.0f);
+      return setPWM_manual(pin, (DCPercentage * pwmPeriod) / 100.0f);
     }
 
     ///////////////////////////////////////////

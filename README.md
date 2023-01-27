@@ -38,15 +38,16 @@
   * [3. Set or change PWM frequency or dutyCycle](#3-set-or-change-PWM-frequency-or-dutyCycle)
   * [4. Set or change PWM frequency and dutyCycle manually and efficiently in waveform creation](#4-Set-or-change-PWM-frequency-and-dutyCycle-manually-and-efficiently-in-waveform-creation)
 * [Examples](#examples)
-  * [ 1. PWM_Basic](examples/PWM_Basic)
-  * [ 2. PWM_DynamicDutyCycle](examples/PWM_DynamicDutyCycle) 
-  * [ 3. PWM_DynamicDutyCycle_Int](examples/PWM_DynamicDutyCycle_Int)
-  * [ 4. PWM_DynamicFreq](examples/PWM_DynamicFreq)
-  * [ 5. PWM_Multi](examples/PWM_Multi)
-  * [ 6. PWM_MultiChannel](examples/PWM_MultiChannel)
-  * [ 7. PWM_Waveform](examples/PWM_Waveform)
-  * [ 8. PWM_StepperControl](examples/PWM_StepperControl) **New**
-  * [ 9. PWM_manual](examples/PWM_manual) **New**
+  * [ 1. PWM_Basic](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_Basic)
+  * [ 2. PWM_DynamicDutyCycle](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_DynamicDutyCycle) 
+  * [ 3. PWM_DynamicDutyCycle_Int](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_DynamicDutyCycle_Int)
+  * [ 4. PWM_DynamicFreq](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_DynamicFreq)
+  * [ 5. PWM_Multi](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_Multi)
+  * [ 6. PWM_MultiChannel](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_MultiChannel)
+  * [ 7. PWM_Waveform](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_Waveform)
+  * [ 8. PWM_StepperControl](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_StepperControl) **New**
+  * [ 9. PWM_manual](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_manual) **New**
+  * [10. PWM_SpeedTest](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_SpeedTest) **New**
 * [Example PWM_Multi](#example-PWM_Multi)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
   * [1. PWM_DynamicDutyCycle on Arduino AVR Mega2560](#1-PWM_DynamicDutyCycle-on-Arduino-AVR-Mega2560)
@@ -56,6 +57,7 @@
   * [5. PWM_Waveform on Arduino AVR ATMega32U4](#5-PWM_Waveform-on-Arduino-AVR-ATMega32U4)
   * [6. PWM_Waveform on Arduino AVR Nano](#6-PWM_Waveform-on-Arduino-AVR-Nano)
   * [7. PWM_manual on Arduino AVR Nano](#7-PWM_manual-on-Arduino-AVR-Nano)
+  * [8. PWM_SpeedTest on Arduino AVR Nano](#8-PWM_SpeedTest-on-Arduino-AVR-Nano)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -101,7 +103,7 @@ This important feature is absolutely necessary for mission-critical tasks. These
 
 New efficient `setPWM_manual()` function enables waveform creation using PWM.
 
-The [**PWM_Multi**](examples/PWM_Multi) example will demonstrate the usage of multichannel PWM using multiple Hardware-PWM blocks (slices). The 4 independent Hardware-PWM channels are used **to control 4 different PWM outputs**, with totally independent frequencies and dutycycles on `Arduino Mega`.
+The [**PWM_Multi**](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_Multi) example will demonstrate the usage of multichannel PWM using multiple Hardware-PWM blocks (slices). The 4 independent Hardware-PWM channels are used **to control 4 different PWM outputs**, with totally independent frequencies and dutycycles on `Arduino Mega`.
 
 Being hardware-based PWM, their executions are not blocked by bad-behaving functions / tasks, such as connecting to WiFi, Internet or Blynk services.
 
@@ -349,19 +351,30 @@ Need to call only once for each pin
 PWM_Instance->setPWM(PWM_Pins, frequency, dutyCycle);
 ```
 
-after that, if just changing `dutyCycle` / `level`, use 
+after that, if just changing `dutyCycle` / `level`, use the **fastest**
 
 ```cpp
 // For 50.0f dutycycle
+// 8415-8423ns
 new_level = 50.0f * PWM_Instance->getPWMPeriod() / 100.0f ;
 PWM_Instance->setPWM_manual(PWM_Pins, new_level);
 ```
 
-or better and much easier to use
+or better and much easier to use, but `slowest`
 
 ```cpp
+// 52745ns
 new_DCPercentage = 50.0f;
 PWM_Instance->setPWM_DCPercentage_manual(PWM_Pins, new_DCPercentage);
+```
+
+or the `faster`
+
+```cpp
+// dutycyclePercent = 0-65535 == 0-100%
+// Faster, 8863ns
+dutycyclePercentInt = 1 << 15;   // 50%
+PWM_Instance->setPWM_DCPercentageInt_manual(pinToUse, dutycyclePercentInt);
 ```
 
 ---
@@ -369,20 +382,21 @@ PWM_Instance->setPWM_DCPercentage_manual(PWM_Pins, new_DCPercentage);
 
 ### Examples: 
 
- 1. [PWM_Basic](examples/PWM_Basic)
- 2. [PWM_DynamicDutyCycle](examples/PWM_DynamicDutyCycle)
- 3. [PWM_DynamicDutyCycle_Int](examples/PWM_DynamicDutyCycle_Int)
- 4. [PWM_DynamicFreq](examples/PWM_DynamicFreq)
- 5. [PWM_Multi](examples/PWM_Multi)
- 6. [PWM_MultiChannel](examples/PWM_MultiChannel)
- 7. [PWM_Waveform](examples/PWM_Waveform)
- 8. [PWM_StepperControl](examples/PWM_StepperControl) **New**
- 9. [PWM_manual](examples/PWM_manual) **New**
+ 1. [PWM_Basic](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_Basic)
+ 2. [PWM_DynamicDutyCycle](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_DynamicDutyCycle)
+ 3. [PWM_DynamicDutyCycle_Int](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_DynamicDutyCycle_Int)
+ 4. [PWM_DynamicFreq](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_DynamicFreq)
+ 5. [PWM_Multi](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_Multi)
+ 6. [PWM_MultiChannel](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_MultiChannel)
+ 7. [PWM_Waveform](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_Waveform)
+ 8. [PWM_StepperControl](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_StepperControl) **New**
+ 9. [PWM_manual](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_manual) **New**
+10. [PWM_SpeedTest](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_SpeedTest) **New**
  
 ---
 ---
 
-### Example [PWM_Multi](examples/PWM_Multi)
+### Example [PWM_Multi](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_Multi)
 
 https://github.com/khoih-prog/AVR_PWM/blob/22230c236f4eaf3c4b4ee35f2008e78349acdf11/examples/PWM_Multi/PWM_Multi.ino#L60-L176
 
@@ -394,12 +408,12 @@ https://github.com/khoih-prog/AVR_PWM/blob/22230c236f4eaf3c4b4ee35f2008e78349acd
 
 ### 1. PWM_DynamicDutyCycle on Arduino AVR Mega2560
 
-The following is the sample terminal output when running example [PWM_DynamicDutyCycle](examples/PWM_DynamicDutyCycle) on **AVR Mega2560**, to demonstrate the ability to provide high PWM frequencies and ability to change DutyCycle `on-the-fly`.
+The following is the sample terminal output when running example [PWM_DynamicDutyCycle](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_DynamicDutyCycle) on **AVR Mega2560**, to demonstrate the ability to provide high PWM frequencies and ability to change DutyCycle `on-the-fly`.
 
 
 ```cpp
 Starting PWM_DynamicDutyCycle on Arduino AVR Mega2560/ADK
-AVR_PWM v1.1.0
+AVR_PWM v1.2.0
 [PWM] AVR_PWM: _dutycycle = 32767
 [PWM] setPWM_Int: _dutycycle = 32767
 [PWM] setPWM_Int:using TIMER4C
@@ -433,11 +447,11 @@ Actual data: pin = 8, PWM DC = 9.99, PWMPeriod = 8000.00, PWM Freq (Hz) = 1000.0
 
 ### 2. PWM_Multi on Arduino AVR Mega2560
 
-The following is the sample terminal output when running example [**PWM_Multi**](examples/PWM_Multi) on **AVR Mega2560**, to demonstrate the ability to provide high PWM frequencies on multiple `PWM-capable` pins.
+The following is the sample terminal output when running example [**PWM_Multi**](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_Multi) on **AVR Mega2560**, to demonstrate the ability to provide high PWM frequencies on multiple `PWM-capable` pins.
 
 ```cpp
 Starting PWM_Multi on Arduino AVR Mega2560/ADK
-AVR_PWM v1.1.0
+AVR_PWM v1.2.0
 =====================================================================================
 Index	Pin	PWM_freq	DutyCycle	Actual Freq
 =====================================================================================
@@ -463,11 +477,11 @@ Actual data: pin = 12, PWM DC = 89.90, PWMPeriod = 1000.00, PWM Freq (Hz) = 8000
 
 ### 3. PWM_DynamicFreq on Arduino AVR Mega2560
 
-The following is the sample terminal output when running example [**PWM_DynamicFreq**](examples/PWM_DynamicFreq) on **AVR Mega2560**, to demonstrate the ability to change dynamically PWM frequencies.
+The following is the sample terminal output when running example [**PWM_DynamicFreq**](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_DynamicFreq) on **AVR Mega2560**, to demonstrate the ability to change dynamically PWM frequencies.
 
 ```cpp
 Starting PWM_DynamicFreq on Arduino AVR Mega2560/ADK
-AVR_PWM v1.1.0
+AVR_PWM v1.2.0
 [PWM] AVR_PWM: _dutycycle = 32767
 [PWM] setPWM_Int: _dutycycle = 32767
 [PWM] setPWM_Int:using TIMER4C
@@ -512,12 +526,12 @@ Actual data: pin = 8, PWM DC = 49.75, PWMPeriod = 400.00, PWM Freq (Hz) = 20000.
 
 ### 4. PWM_Waveform on Arduino AVR Mega2560
 
-The following is the sample terminal output when running example [**PWM_Waveform**](examples/PWM_Waveform) on **AVR Mega2560**, to demonstrate how to use the `setPWM_manual()` function in wafeform creation
+The following is the sample terminal output when running example [**PWM_Waveform**](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_Waveform) on **AVR Mega2560**, to demonstrate how to use the `setPWM_manual()` function in wafeform creation
 
 
 ```cpp
 Starting PWM_Waveform on Arduino AVR Mega2560/ADK
-AVR_PWM v1.1.0
+AVR_PWM v1.2.0
 [PWM] AVR_PWM: _dutycycle = 0
 [PWM] setPWM: _dutycycle = 0
 [PWM] setPWM_Int: _dutycycle = 0
@@ -567,12 +581,12 @@ Actual data: pin = 8, PWM DutyCycle = 0.00, PWMPeriod = 8000.00, PWM Freq (Hz) =
 
 ### 5. PWM_Waveform on Arduino AVR ATMega32U4
 
-The following is the sample terminal output when running example [**PWM_Waveform**](examples/PWM_Waveform) on **ATMega32U4**, to demonstrate how to use the `setPWM_manual()` function in wafeform creation
+The following is the sample terminal output when running example [**PWM_Waveform**](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_Waveform) on **ATMega32U4**, to demonstrate how to use the `setPWM_manual()` function in wafeform creation
 
 
 ```cpp
 Starting PWM_Waveform on Arduino AVR ATMega32U4
-AVR_PWM v1.1.0
+AVR_PWM v1.2.0
 [PWM] AVR_PWM: _dutycycle = 0
 [PWM] setPWM: _dutycycle = 0
 [PWM] setPWM_Int: _dutycycle = 0
@@ -621,12 +635,12 @@ Actual data: pin = 9, PWM DutyCycle = 0.00, PWMPeriod = 8000.00, PWM Freq (Hz) =
 
 ### 6. PWM_Waveform on Arduino AVR Nano
 
-The following is the sample terminal output when running example [**PWM_Waveform**](examples/PWM_Waveform) on **AVR Nano**, to demonstrate how to use the `setPWM_manual()` function in wafeform creation
+The following is the sample terminal output when running example [**PWM_Waveform**](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_Waveform) on **AVR Nano**, to demonstrate how to use the `setPWM_manual()` function in wafeform creation
 
 
 ```cpp
 Starting PWM_Waveform on Arduino AVR UNO, Nano, etc.
-AVR_PWM v1.1.0
+AVR_PWM v1.2.0
 [PWM] AVR_PWM: _dutycycle = 0
 [PWM] setPWM: _dutycycle = 0
 [PWM] setPWM_Int: _dutycycle = 0
@@ -676,12 +690,12 @@ Actual data: pin = 10, PWM DutyCycle = 0.00, PWMPeriod = 8000.00, PWM Freq (Hz) 
 
 ### 7. PWM_manual on Arduino AVR Nano
 
-The following is the sample terminal output when running example [**PWM_manual**](examples/PWM_manual) on **AVR Nano**, to demonstrate how to use the `setPWM_manual()` and `setPWM_DCPercentage_manual()` functions in wafeform creation
+The following is the sample terminal output when running example [**PWM_manual**](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_manual) on **AVR Nano**, to demonstrate how to use the `setPWM_manual()` and `setPWM_DCPercentage_manual()` functions in wafeform creation
 
 
 ```cpp
 Starting PWM_manual on Arduino AVR UNO, Nano, etc.
-AVR_PWM v1.1.0
+AVR_PWM v1.2.0
 =================================================================================================
 Actual data: pin = 10, PWM DutyCycle % = 0.00, PWMPeriod = 8000.00, PWM Freq (Hz) = 1000.0000
 =================================================================================================
@@ -711,7 +725,28 @@ Actual data: pin = 10, PWM DutyCycle % = 8.00, PWMPeriod = 8000.00, PWM Freq (Hz
 =================================================================================================
 ```
 
+---
 
+### 8. PWM_SpeedTest on Arduino AVR Nano
+
+The following is the sample terminal output when running example [**PWM_SpeedTest**](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_SpeedTest) on **AVR Nano**, to demonstrate how to use new faster `setPWM_DCPercentageInt_manual()` function in wafeform creation, The time is `8863ns` compared to `52745ns` when using `setPWM_DCPercentage_manual()` function. The fastest is `setPWM_manual` with `8423ns`, which is to be used with pre-calculated values in array
+
+```
+Starting PWM_SpeedTest on Arduino AVR UNO, Nano, etc.
+AVR_PWM v1.2.0
+=================================================================================================
+Actual data: pin = 10, PWM DutyCycle % = 0.00, PWMPeriod = 8000.00, PWM Freq (Hz) = 1000.0000
+=================================================================================================
+Average time of setPWM function USING_DC_PERCENT
+ns=8863
+ns=8854
+ns=8863
+ns=8854
+ns=8863
+ns=8854
+ns=8863
+...
+```
 
 ---
 ---
@@ -758,10 +793,13 @@ Submit issues to: [AVR_PWM issues](https://github.com/khoih-prog/AVR_PWM/issues)
  - [`Arduino AVR core`](https://github.com/arduino/ArduinoCore-avr)
  - [`Adafruit AVR core`](https://github.com/adafruit/Adafruit_Arduino_Boards)
  - [`Sparkfun AVR core`](https://github.com/sparkfun/Arduino_Boards)
- 2. Add example [PWM_StepperControl](https://github.com/khoih-prog/AVR_PWM/examples/PWM_StepperControl) to demo how to control Stepper Motor using PWM
- 3. Add example [PWM_manual](https://github.com/khoih-prog/AVR_PWM/examples/PWM_manual) to demo how to correctly use PWM to generate waveform
+ 2. Add example [PWM_StepperControl](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_StepperControl) to demo how to control Stepper Motor using PWM
+ 3. Add example [PWM_manual](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_manual) to demo how to correctly use PWM to generate waveform
  4. Add function `setPWM_DCPercentage_manual()` to facilitate the setting PWM DC manually by using DCPercentage, instead of absolute DCValue depending on varying PWMPeriod
  5. Catch low frequency error and use lowest permissible frequency
+ 6. Optimize speed with new `setPWM_DCPercentageInt_manual` function to improve speed almost 85% compared to `setPWM_DCPercentage_manual`
+ 7. Add example [PWM_SpeedTest](https://github.com/khoih-prog/AVR_PWM/tree/main/examples/PWM_SpeedTest) to demo the better speed of new `setPWM_DCPercentageInt_manual` function
+
 
 ---
 ---
